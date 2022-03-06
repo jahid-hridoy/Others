@@ -1,0 +1,63 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+int minDif(string city1, string city2)
+{
+    int freq1[26]={0};
+    int freq2[26]={0};
+
+    for(int i=0;i<city1.size();i++)
+        freq1[city1[i]-'A']++;
+    for(int i=0;i<city2.size();i++)
+        freq2[city2[i]-'A']++;
+
+    int dif=0;
+    for(int i=0;i<26;i++)
+        if(freq1[i]!=freq2[i])
+            dif++;
+    return dif;
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+//    freopen("input.txt","r",stdin);
+//    freopen("output.txt","w",stdout);
+
+    int tks,ks=1;
+    vector<string>city;
+    cin>>tks;
+    while(tks--)
+    {
+        int n;
+        string str, ansCity1, ansCity2;
+
+        cin>>n;
+        city.clear();
+        for(int i=0;i<n;i++)
+        {
+            cin>>str;
+            city.push_back(str);
+        }
+        sort(city.begin(), city.end());
+
+        int result = INT_MAX;
+        for(int i=0;i<n-1;i++)
+            for(int j=i+1;j<n;j++)
+            {
+                int dif = minDif(city[i], city[j]);
+                if(dif<result)
+                {
+                    result = dif;
+                    ansCity1 = city[i];
+                    ansCity2 = city[j];
+                }
+            }
+
+        cout<<ansCity1<<" "<<ansCity2<<'\n';
+    }
+
+    return  0;
+}
