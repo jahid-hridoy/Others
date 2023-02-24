@@ -1,0 +1,73 @@
+#include <bits/stdc++.h>
+using namespace std;
+#ifndef ONLINE_JUDGE
+#include "debug.h"
+#endif
+#define ll long long
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define vi vector<int>
+#define vl vector<ll>
+#define pii pair<int,int>
+#define vii vector<pair<int,int>>
+#define vll vector<pair<ll,ll>>
+#define pll pair<ll,ll>
+#define pq priority_queue<int>
+#define pql priority_queue<ll>
+#define ss ' '
+#define nn '\n'
+template <typename T>
+using minHeap = priority_queue<T, vector<T>, greater<T>>;
+
+const int MAX = 2e5 + 10;
+ll a[MAX];
+
+void solve() {
+
+    ll n, k;
+    cin >> n >> k;
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    vector<ll>p1(n);
+
+    for (int i = 0; i < n; i++) {
+        if (i)p1[i] = p1[i - 1];
+        p1[i]++;
+        p1[i] += a[i] - 1;
+    }
+
+    ll p2 = a[0];
+
+    for (int i = 0; i < n; i++) {
+        p2++;
+        p2 = max(p2, p1[i] + 1);
+        p2 += a[i] - 1;
+    }
+
+    if (k == 1)cout << p1[n - 1] << nn;
+    else if (k == 2)cout << p2 << nn;
+    else cout << (p1[n - 1] + (k - 1) * (p2 - p1[n - 1])) << nn;
+
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    int t = 1;
+    cin >> t;
+
+    int cs = 1;
+
+    while (t--) {
+
+        cout << "Case " << cs++ << ": ";
+        solve();
+
+    }
+
+    return 0;
+}
