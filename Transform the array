@@ -1,0 +1,186 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define ll long long
+#define pb push_back
+#define all(x) x.begin(), x.end()
+#define vi vector<int>
+#define vl vector<ll>
+#define pii pair<int,int>
+#define vii vector<pair<int,int>>
+#define vll vector<pair<ll,ll>>
+#define pll pair<ll,ll>
+#define pq priority_queue<int>
+#define pql priority_queue<ll>
+#define ss ' '
+#define nn '\n'
+template <typename T>
+using minHeap = priority_queue<T, vector<T>, greater<T>>;
+
+const int N = 1e4 + 10;
+int p[N];
+int m;
+bool mark[N];
+
+void sieve()
+{
+    for (long long i = 3; i * i < N; i += 2) {
+        if (mark[i] == 0) {
+            for (long long j = i * i; j < N; j += i + i)
+                mark[j] = true;
+        }
+    }
+    p[m++] = 2;
+    for (int i = 3; i < N; i += 2) {
+        if (mark[i] == 0)
+            p[m++] = i;
+    }
+}
+
+const int MAX = 5e5 + 10;
+int a[MAX], b[MAX];
+
+void solve() {
+
+    int n;
+    cin >> n;
+
+    map<int, int>mp;
+
+    int gc = 0;
+
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        gc = __gcd(gc, a[i]);
+        int x = a[i];
+        for (int j = 0; j < m and (p[j]*p[j] * 1LL) <= x; j++) {
+            if (x % p[j] == 0) {
+                mp[p[j]]++;
+                while (x % p[j] == 0) {
+                    x /= p[j];
+                }
+            }
+        }
+        if (x != 1)mp[x]++;
+    }
+
+    bool ok = true;
+
+    for (int i = 0; i < n; i++) {
+        cin >> b[i];
+        int x = b[i];
+        if (ok == false)continue;
+        for (int j = 0; j < m and (p[j]*p[j] * 1LL) <= x; j++) {
+            if (x % p[j] == 0) {
+                if (mp[p[j]] == 0) {
+                    ok = false;
+                    continue;
+                }
+                while (x % p[j] == 0) {
+                    x /= p[j];
+                }
+            }
+        }
+        if (x != 1) {
+            if (mp[x] == 0) {
+                ok = false;
+            }
+        }
+    }
+
+    cout << (ok ? "Yes " : "No ");
+
+    mp.clear();
+
+    for (int j = 0; j < m and (p[j]*p[j] * 1LL) <= gc; j++) {
+        if (gc % p[j] == 0) {
+            mp[p[j]]++;
+            while (gc % p[j] == 0) {
+                gc /= p[j];
+            }
+        }
+    }
+    if (gc != 1) {
+        mp[gc]++;
+    }
+
+    int g = __gcd(a[0], b[0]);
+    int _x = b[0] / g, _y = a[0] / g;
+
+    int x = _x;
+
+    for (int j = 0; j < m and (p[j]*p[j] * 1LL) <= x; j++) {
+        if (x % p[j] == 0) {
+            if (mp[p[j]] == 0) {
+                cout << "No\n";
+                return;
+            }
+            while (x % p[j] == 0) {
+                x /= p[j];
+            }
+        }
+    }
+    if (x != 1) {
+        if (mp[x] == 0) {
+            cout << "No\n";
+            return;
+        }
+    }
+
+    x = _y;
+
+    for (int j = 0; j < m and (p[j]*p[j] * 1LL) <= x; j++) {
+        if (x % p[j] == 0) {
+            if (mp[p[j]] == 0) {
+                cout << "No\n";
+                return;
+            }
+            while (x % p[j] == 0) {
+                x /= p[j];
+            }
+        }
+    }
+    if (x != 1) {
+        if (mp[x] == 0) {
+            cout << "No\n";
+            return;
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        ll tt = a[i];
+        tt *= _x;
+        if (tt % _y) {
+            cout << "No\n";
+            return;
+        }
+        tt /= _y;
+        if (tt != b[i]) {
+            cout << "No\n";
+            return;
+        }
+    }
+
+    cout << "Yes\n";
+
+}
+
+int main() {
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0);
+
+    sieve();
+
+    int t = 1;
+    cin >> t;
+
+    int cs = 1;
+
+    while (t--) {
+
+        cout << "Case " << cs++ << ": ";
+        solve();
+
+    }
+
+    return 0;
+}
